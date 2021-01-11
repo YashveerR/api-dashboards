@@ -9,7 +9,10 @@ const withAuthentication = (Component: any) => {
     listener: any;
     constructor(props: any) {
       super(props);
-      console.log(localStorage.getItem("authUser"));
+      console.log(
+        "Checking the authuser in local storage ",
+        localStorage.getItem("authUser")
+      );
       this.props.sessionStore.setAuthUser(
         JSON.parse(localStorage.getItem("authUser") || "{}")
       );
@@ -23,11 +26,19 @@ const withAuthentication = (Component: any) => {
           localStorage.removeItem("paymentId");
           this.props.sessionStore.setAuthUser(authUser);
           console.log("Firebase user checked out");
+          console.log(
+            "Session stores within with Auth",
+            this.props.sessionStore.authUser
+          );
         },
         () => {
           localStorage.removeItem("authUser");
           this.props.sessionStore.setAuthUser(null);
           console.log("Firebase user deleted");
+          console.log(
+            "Session stores within withauth no user",
+            this.props.sessionStore.authUser
+          );
         }
       );
     }

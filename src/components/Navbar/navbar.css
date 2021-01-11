@@ -1,0 +1,40 @@
+.navbar-add {
+  display: grid;
+}
+
+/* style inputs and link buttons */
+input,
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: darkgrey;
+  border-radius: 4px;
+  margin: 5px 0;
+  opacity: 0.85;
+  display: inline-block;
+  font-size: 17px;
+  line-height: 20px;
+  text-decoration: none; /* remove underline from anchors */
+}
+
+input:hover,
+.btn:hover {
+  opacity: 1;
+}
+
+/* style the submit button */
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.submitBtn {
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}

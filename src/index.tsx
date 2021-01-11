@@ -7,7 +7,6 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "mobx-react";
 import store from "./stores";
-import * as serviceWorker from "./serviceWorker";
 
 import Firebase, { FirebaseContext } from "./components/Firebase";
 
