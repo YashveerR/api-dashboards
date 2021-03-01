@@ -5,4 +5,5 @@ export const ACCOUNT = "/account";
 export const ADMIN = "/admin";
 export const PASSWORD_FORGET = "/pw-forget";
 
-export const DASHBOARD = "/api-dashboard";
+export const DASHBOARD = "/api";
+export const LPR_API = "/api/lpr";

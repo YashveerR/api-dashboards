@@ -6,6 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import * as ROUTES from "../../constants/routes";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { ToastContainer, toast } from "react-toastify";
 
 import "./navbar.css";
 import { Link, withRouter } from "react-router-dom";
@@ -55,7 +56,7 @@ class NavBars extends React.Component<any, any> {
     return (
       <>
         <div>
-          <Navbar>
+          <Navbar bg="primary" variant="dark">
             <Navbar.Brand href="/">API Playground</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse>
@@ -97,6 +98,7 @@ class NavBarsNoAuth extends React.Component<
       switchView: false,
     };
     this.element = React.createRef();
+    this.onRequest = this.onRequest.bind(this);
   }
   onSubmit = (event: any) => {
     const { email, password } = this.state;
@@ -106,7 +108,7 @@ class NavBarsNoAuth extends React.Component<
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        //this.props.history.push(ROUTES.DASHBOARD);
+        this.props.history.push(ROUTES.DASHBOARD);
       })
       .catch((error: any) => {
         console.log("error received", error);
@@ -119,7 +121,27 @@ class NavBarsNoAuth extends React.Component<
   onRequest = (event: any) => {
     const { email, password } = this.state;
 
+    var send_access_mail = this.props.firebase.functions.httpsCallable(
+      "sendMail"
+    );
+
+    send_access_mail({
+      text: { dest: email },
+      context: "nothing to see here",
+    })
+      .then(() => {
+        console.log("Call to function passed...");
+        toast.success(
+          "Request sent, Hang tight, Admins should contact you shortly"
+        );
+      })
+      .catch(() => {
+        console.log("Error has returned when calling the resize func...");
+      });
+
+    console.log(password);
     //here we will call the firebase function to send a request to access the API's
+    event.preventDefault();
   };
 
   onChange = (event: any) => {
@@ -133,7 +155,7 @@ class NavBarsNoAuth extends React.Component<
     return (
       <>
         <div>
-          <Navbar>
+          <Navbar bg="dark" variant="dark">
             <Navbar.Brand href="/">API Playground</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse>
@@ -181,7 +203,7 @@ class NavBarsNoAuth extends React.Component<
               </div>
               <div className="modal-body">
                 {this.state.switchView ? (
-                  <form onSubmit={this.onRequest}>
+                  <form>
                     <input
                       name="email"
                       value={email}
@@ -196,6 +218,15 @@ class NavBarsNoAuth extends React.Component<
                       type="password"
                       placeholder="Password"
                     />
+                    <button
+                      className="submitBtn btn"
+                      disabled={isInvalid}
+                      type="submit"
+                      onClick={this.onRequest}
+                      data-dismiss="modal"
+                    >
+                      Send Request
+                    </button>
                   </form>
                 ) : (
                   <form onSubmit={this.onSubmit}>
@@ -227,9 +258,7 @@ class NavBarsNoAuth extends React.Component<
               </div>
               <div className="modal-footer">
                 {this.state.switchView ? (
-                  <button className="btn btn-secondary btn-lg active">
-                    Send Request
-                  </button>
+                  ""
                 ) : (
                   <button
                     className="btn btn-secondary btn-lg active"
@@ -242,6 +271,17 @@ class NavBarsNoAuth extends React.Component<
             </div>
           </div>
         </div>
+        <ToastContainer
+          position="top-center"
+          autoClose={10000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        ></ToastContainer>
       </>
     );
   }
